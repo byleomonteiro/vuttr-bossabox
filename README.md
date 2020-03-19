@@ -1,6 +1,6 @@
 # 🔥 vuttr-bossabox
 
-🚀 API Rest em Node.js desenvolvida pra teste na BossaBox.
+🚀 API Rest em Node.js desenvolvida pra teste na plataforma BossaBox.
 
     🌠 Foram utilizadas as tecnologias:
       *Node.js e Banco de Dados PostgreSQL.
