@@ -4,12 +4,17 @@ class IconController {
     async store(req, res) {
         const { originalname: name, filename: path } = req.file;
 
-        const icon = await Icon.create({
+        const { id, url } = await Icon.create({
             name,
             path,
         });
 
-        return res.status(201).json(icon);
+        return res.status(201).json({
+            id,
+            name,
+            path,
+            url,
+        });
     }
 
     async delete(req, res) {

@@ -21,7 +21,7 @@ describe('Icon', () => {
     it('should be able to upload a new icon', async () => {
         const iconPath = resolve(__dirname, 'iconsTest', 'icon.jpg');
         const response = await request
-            .post('/icons')
+            .post('/v1/icons')
             .attach('file', iconPath)
             .set('Authorization', `Bearer ${token}`);
 
@@ -50,7 +50,7 @@ describe('Icon', () => {
 
     it('should not be able to delete icon when icon not exists', async () => {
         const response = await request
-            .delete(`/icons/not_exists`)
+            .delete('/v1/icons/0')
             .set('Authorization', `Bearer ${token}`);
         expect(response.status).toBe(400);
     });
@@ -58,7 +58,7 @@ describe('Icon', () => {
     it('should be able to delete an icon', async () => {
         const icon = await Icon.findOne({});
         const response = await request
-            .delete(`/icons/${icon.id}`)
+            .delete(`/v1/icons/${icon.id}`)
             .set('Authorization', `Bearer ${token}`);
         expect(response.status).toBe(204);
     });

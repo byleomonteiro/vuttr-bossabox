@@ -1,4 +1,6 @@
 node_modules/
 dist
 .env
+__tests__/coverage
 tmp/uploads/*
+__tests__/db.sqlite

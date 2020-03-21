@@ -26,10 +26,6 @@ module.exports = {
                 type: Sequelize.TEXT,
                 allowNull: false,
             },
-            tags: {
-                type: Sequelize.ARRAY(Sequelize.TEXT),
-                allowNull: false,
-            },
             created_at: {
                 type: Sequelize.DATE,
                 allowNull: false,

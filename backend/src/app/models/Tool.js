@@ -7,9 +7,6 @@ class Tool extends Model {
                 title: Sequelize.STRING,
                 link: Sequelize.STRING,
                 description: Sequelize.TEXT,
-                tags: {
-                    type: Sequelize.ARRAY(Sequelize.TEXT),
-                },
             },
             { sequelize }
         );
@@ -18,6 +15,7 @@ class Tool extends Model {
 
     static associate(models) {
         this.belongsTo(models.Icon, { foreignKey: 'icon_id', as: 'icon' });
+        this.hasMany(models.Tag);
     }
 }
 

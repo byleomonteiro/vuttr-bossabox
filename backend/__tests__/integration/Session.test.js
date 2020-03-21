@@ -17,13 +17,13 @@ describe('Session', () => {
     it('should be able to log in', async () => {
         const user = await factory.attrs('UserCreate');
         const create = await request
-            .post('/users')
+            .post('/v1/users')
             .send(user)
             .set('Authorization', `Bearer ${token}`);
 
         expect(create.status).toBe(201);
 
-        const response = await request.post('/sessions').send({
+        const response = await request.post('/v1/sessions').send({
             email: user.email,
             password: user.password,
         });
@@ -34,7 +34,7 @@ describe('Session', () => {
 
     it('should not be able to log in when user not exists', async () => {
         const user = await factory.attrs('Session');
-        const response = await request.post('/sessions').send(user);
+        const response = await request.post('/v1/sessions').send(user);
         expect(response.status).toBe(400);
     });
 
@@ -42,13 +42,13 @@ describe('Session', () => {
         const user = await factory.attrs('UserCreate');
 
         const create = await request
-            .post('/users')
+            .post('/v1/users')
             .send(user)
             .set('Authorization', `Bearer ${token}`);
 
         expect(create.status).toBe(201);
 
-        const response = await request.post('/sessions').send({
+        const response = await request.post('/v1/sessions').send({
             email: user.email,
             password: `wrong${user.password}`,
         });
