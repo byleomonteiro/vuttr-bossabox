@@ -1,11 +1,18 @@
-import { Op } from 'sequelize';
-
 import Tool from '../models/Tool';
 import Icon from '../models/Icon';
 import Tag from '../models/Tag';
 
+import CreateToolService from '../services/CreateToolService';
+import UpdateToolService from '../services/UpdateToolService';
+
+import Cache from '../../lib/Cache';
+
 class ToolController {
     async index({ res }) {
+        const cached = await Cache.get('tools');
+
+        if (cached) return res.json(cached);
+
         const tools = await Tool.findAll({
             attributes: ['id', 'title', 'link', 'description'],
             include: [
@@ -20,12 +27,14 @@ class ToolController {
                 },
             ],
         });
+        await Cache.set('tools', tools);
 
         return res.json(tools);
     }
 
     async show(req, res) {
         const { tag } = req.query;
+
         const find = await Tool.findAll({
             attributes: ['id', 'title', 'link', 'description'],
             include: [
@@ -53,31 +62,18 @@ class ToolController {
         if (icon_id) {
             const iconExists = await Icon.findByPk(icon_id);
             if (!iconExists) {
-                return res.status(400).json({ error: 'Icon does not exists' });
+                return res.status(400).json('Icon does not exists');
             }
         }
-        const tool = await Tool.create({ icon_id, title, link, description });
-
-        if (tags) {
-            await Promise.all(
-                tags.map(async tag => {
-                    await Tag.create({
-                        title: tag,
-                        tool_id: tool.id,
-                    });
-                })
-            );
-        }
-
-        const findTool = await Tool.findByPk(tool.id, {
-            include: [
-                {
-                    model: Tag,
-                    attributes: ['id', 'title'],
-                },
-            ],
+        const tool = await CreateToolService.run({
+            icon_id,
+            title,
+            link,
+            description,
+            tags,
         });
-        return res.status(201).json(findTool);
+
+        return res.status(201).json(tool);
     }
 
     async update(req, res) {
@@ -90,36 +86,20 @@ class ToolController {
             }
         }
 
-        const tool = await Tool.findByPk(req.params.id);
-
-        if (!tool) {
-            return res.status(400).json({ error: 'Tool does not exists' });
-        }
-        await tool.update({ title, link, description });
-
-        if (tags) {
-            await Promise.all(
-                tags.map(async tag => {
-                    await Tag.update(
-                        {
-                            title: tag,
-                            tool_id: tool.id,
-                        },
-                        {
-                            where: {
-                                tool_id: tool.id,
-                            },
-                        }
-                    );
-                })
-            );
-        }
+        const tool = await UpdateToolService.run({
+            tool_id: req.params.id,
+            title,
+            link,
+            description,
+            tags,
+        });
 
         return res.json(tool);
     }
 
     async destroy(req, res) {
         const tool = await Tool.findByPk(req.params.id);
+
         if (!tool) {
             return res.status(400).json({ error: 'Tool does not exists' });
         }
@@ -130,6 +110,11 @@ class ToolController {
         }
 
         await tool.destroy();
+
+        const checkCache = await Cache.get('tools');
+        if (checkCache) {
+            await Cache.invalidate('tools');
+        }
 
         return res.status(204).send();
     }
