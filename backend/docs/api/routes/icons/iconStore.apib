@@ -3,12 +3,16 @@ Rota responsável por fazer upload de ícones no sistema.
 
 + Request Upload de ícones (multipart/form-data)
     + Attributes
-        <!-- include(../../requests/icons/iconStore.apib) -->
+        <!-- include(../../data/iconCreate.apib) -->
 
 + Response 201 (application/json)
     + Attributes
-        <!-- include(../../responses/icons/iconStore.apib) -->
+        <!-- include(../../data/iconList.apib) -->
 
 + Response 400 (application/json)
     + Attributes
         <!-- include(../../util/errorValidation.apib) -->
+
++ Response 401 (application/json)
+    + Attributes
+        <!-- include(../../util/errorTokenNotProvided.apib) -->

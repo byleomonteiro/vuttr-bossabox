@@ -3,12 +3,12 @@ import './bootstrap';
 import express from 'express';
 import helmet from 'helmet';
 import redis from 'redis';
-import Youch from 'youch';
 import RateLimit from 'express-rate-limit';
 import RateLimitRedis from 'rate-limit-redis';
 import { resolve } from 'path';
-import 'express-async-errors';
 import routes from './routes';
+
+import ErrorHandler from './app/middlewares/errorHandler';
 
 import './database';
 
@@ -17,7 +17,7 @@ class App {
         this.server = express();
         this.middlewares();
         this.routes();
-        this.exceptionHandler();
+        this.errorMiddlewares();
     }
 
     middlewares() {
@@ -44,15 +44,12 @@ class App {
         }
     }
 
-    routes() {
-        this.server.use('/v1', routes);
+    errorMiddlewares() {
+        this.server.use(ErrorHandler.catchNotFound);
     }
 
-    exceptionHandler() {
-        this.server.use(async (err, req, res, next) => {
-            const errors = await new Youch(err, req).toJSON();
-            return res.status(500).json(errors);
-        });
+    routes() {
+        this.server.use('/v1', routes);
     }
 }
 

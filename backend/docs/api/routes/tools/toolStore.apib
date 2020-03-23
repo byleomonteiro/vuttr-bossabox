@@ -3,12 +3,20 @@ Rota responsável por criar uma nova ferramenta na base de dados.
 
 + Request Criação de ferramentas (application/json)
     + Attributes
-        <!-- include(../../requests/tools/toolStore.apib) -->
+        <!-- include(../../data/toolRequired.apib) -->
 
 + Response 201 (application/json)
     + Attributes
-        <!-- include(../../responses/tools/toolStore.apib) -->
+        <!-- include(../../data/toolOptional.apib) -->
 
 + Response 400 (application/json)
     + Attributes
         <!-- include(../../util/errorValidation.apib) -->
+
++ Response 401 (application/json)
+    + Attributes
+        <!-- include(../../util/errorTokenNotProvided.apib) -->
+
++ Response 404 (application/json)
+    + Attributes
+        + error: Icon not found

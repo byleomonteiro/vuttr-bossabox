@@ -1,4 +1,5 @@
 import request from 'supertest';
+
 import factory from '../factories';
 import app from '../../src/app';
 
@@ -12,8 +13,7 @@ const token = async () => {
         email: user.email,
         password: user.password,
     });
-
-    console.log(login.body.token);
+    // return login.body.token;
     return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTM1LCJpYXQiOjE1ODQ3MzUyMjMsImV4cCI6MTU4NTM0MDAyM30.F9vcwL7Jq9KXYMXSQFzwdNoUZ6Wr5EqoWETuNhg2DIg';
 };
 

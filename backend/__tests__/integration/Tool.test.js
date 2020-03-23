@@ -1,7 +1,5 @@
 import request from 'supertest';
 
-import Tag from '../../src/app/models/Tag';
-
 import factory from '../factories';
 import app from '../../src/app';
 import truncate from '../util/truncate';
@@ -28,25 +26,14 @@ describe('Tool', () => {
                 title,
                 link,
                 description,
+                tags,
             })
             .set('Authorization', `Bearer ${token}`);
-
         expect(tool.status).toBe(201);
-
-        if (tags) {
-            await Promise.all(
-                tags.map(async tag => {
-                    await Tag.create({
-                        title: tag,
-                        tool_id: tool.id,
-                    });
-                })
-            );
-        }
     });
 
     it('should not be able to insert an icon if not exists', async () => {
-        const { title, link, description } = await factory.attrs('Tool');
+        const { title, link, description, tags } = await factory.attrs('Tool');
         const tool = await request
             .post('/v1/tools')
             .send({
@@ -54,10 +41,10 @@ describe('Tool', () => {
                 title,
                 link,
                 description,
+                tags,
             })
             .set('Authorization', `Bearer ${token}`);
-
-        expect(tool.status).toBe(400);
+        expect(tool.status).toBe(404);
     });
 
     it('should be able to list all tools', async () => {
@@ -85,7 +72,6 @@ describe('Tool', () => {
 
     it('should not be able to update if inserted icon not exists', async () => {
         const { title, link, description, tags } = await factory.attrs('Tool');
-
         const response = await request
             .put('/v1/tools/1')
             .send({
@@ -96,7 +82,21 @@ describe('Tool', () => {
                 tags,
             })
             .set('Authorization', `Bearer ${token}`);
-        expect(response.status).toBe(400);
+        expect(response.status).toBe(404);
+    });
+
+    it('should not be able to update if provided tool id not exists', async () => {
+        const { title, link, description, tags } = await factory.attrs('Tool');
+        const response = await request
+            .put('/v1/tools/0')
+            .send({
+                title,
+                link,
+                description,
+                tags,
+            })
+            .set('Authorization', `Bearer ${token}`);
+        expect(response.status).toBe(404);
     });
 
     it('should be able to delete a tool by id', async () => {
@@ -106,10 +106,10 @@ describe('Tool', () => {
         expect(response.status).toBe(204);
     });
 
-    it('shound not be able to delete a tool if not exists', async () => {
+    it('should not be able to delete if tool not exists', async () => {
         const response = await request
             .delete('/v1/tools/0')
             .set('Authorization', `Bearer ${token}`);
-        expect(response.status).toBe(400);
+        expect(response.status).toBe(404);
     });
 });

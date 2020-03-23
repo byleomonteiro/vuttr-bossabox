@@ -31,6 +31,17 @@ describe('User', () => {
         expect(compareHash).toBe(true);
     });
 
+    it('should be able to register', async () => {
+        const user = await factory.attrs('UserCreate');
+        const response = await request
+            .post('/v1/users')
+            .send(user)
+            .set('Authorization', `Bearer ${token}`);
+
+        expect(response.status).toBe(201);
+        expect(response.body).toHaveProperty('user');
+    });
+
     it('should be able to return all users', async () => {
         const user = await factory.attrs('UserCreate');
         const create = await request
@@ -43,19 +54,7 @@ describe('User', () => {
         const response = await request
             .get('/v1/users')
             .set('Authorization', `Bearer ${token}`);
-
         expect(response.status).toBe(200);
-    });
-
-    it('should be able to register', async () => {
-        const user = await factory.attrs('UserCreate');
-        const response = await request
-            .post('/v1/users')
-            .send(user)
-            .set('Authorization', `Bearer ${token}`);
-
-        expect(response.status).toBe(201);
-        expect(response.body).toHaveProperty('user');
     });
 
     it('should not be able to register with duplicated email', async () => {
@@ -92,15 +91,17 @@ describe('User', () => {
     it('should not be able to update with a existing mail', async () => {});
 
     it('should be able to delete user', async () => {
-        // const user = await factory.attrs('UserCreate');
-        // const create = await request
-        //     .post('/v1/users')
-        //     .send(user)
-        //     .set('Authorization', `Bearer ${token}`);
-        // expect(create.status).toBe(201);
-        // const response = await request
-        //     .delete(`/v1/users/`)
-        //     .set('Authorization', `Bearer ${token}`);
-        // expect(response.status).toBe(204);
+        const user = await factory.attrs('UserCreate');
+        const create = await request
+            .post('/v1/users')
+            .send(user)
+            .set('Authorization', `Bearer ${token}`);
+
+        expect(create.status).toBe(201);
+
+        const response = await request
+            .delete('/v1/users/5')
+            .set('Authorization', `Bearer ${token}`);
+        expect(response.status).toBe(204);
     });
 });

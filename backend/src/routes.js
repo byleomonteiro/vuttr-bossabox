@@ -47,8 +47,8 @@ routes.use(authMiddleware);
 // => Users routes
 routes.get('/users', UserController.index);
 routes.post('/users', validateUserStore, UserController.store);
-routes.put('/users', validateUserUpdate, UserController.update);
-routes.delete('/users', UserController.destroy);
+routes.put('/users/:id', validateUserUpdate, UserController.update);
+routes.delete('/users/:id', UserController.destroy);
 
 // => Tools routes
 routes.get('/tools', ToolController.index);

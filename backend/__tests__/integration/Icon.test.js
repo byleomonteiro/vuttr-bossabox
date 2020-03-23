@@ -1,12 +1,14 @@
 import request from 'supertest';
 import { resolve } from 'path';
-import * as fs from 'fs';
 
 import app from '../../src/app';
 import truncate from '../util/truncate';
 
 import auth from '../util/auth';
+
 import Icon from '../../src/app/models/Icon';
+
+import RemoveFile from '../../src/app/services/RemoveFile';
 
 let token;
 
@@ -25,21 +27,7 @@ describe('Icon', () => {
             .attach('file', iconPath)
             .set('Authorization', `Bearer ${token}`);
 
-        const path = resolve(
-            __dirname,
-            '..',
-            '..',
-            '..',
-            'tmp',
-            'uploads',
-            response.body.path
-        );
-
-        const iconExists = await fs.existsSync(path);
-
-        if (iconExists) {
-            await fs.unlinkSync(path);
-        }
+        await RemoveFile(response.body.path);
 
         expect(response.status).toBe(201);
         expect(response.body).toHaveProperty('id');
@@ -52,7 +40,7 @@ describe('Icon', () => {
         const response = await request
             .delete('/v1/icons/0')
             .set('Authorization', `Bearer ${token}`);
-        expect(response.status).toBe(400);
+        expect(response.status).toBe(404);
     });
 
     it('should be able to delete an icon', async () => {

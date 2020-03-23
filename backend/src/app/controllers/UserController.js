@@ -36,12 +36,18 @@ class UserController {
     async update(req, res) {
         const { email, oldPassword } = req.body;
 
-        const user = await User.findByPk(req.userId);
+        const user = await User.findByPk(req.params.id);
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
 
         if (email && email !== user.email) {
             const userExists = await User.findOne({ where: { email } });
             if (userExists) {
-                return res.status(400).json({ error: 'User already exists' });
+                return res
+                    .status(400)
+                    .json({ error: 'Email is already in use' });
             }
         }
 
@@ -59,7 +65,11 @@ class UserController {
     }
 
     async destroy(req, res) {
-        const user = await User.findByPk(req.userId);
+        const user = await User.findByPk(req.params.id);
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
 
         await user.destroy();
         return res.status(204).send();

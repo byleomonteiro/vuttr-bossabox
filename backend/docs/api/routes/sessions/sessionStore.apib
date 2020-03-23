@@ -3,12 +3,20 @@ Rota responsável por autenticar usuários no sistema
 
 + Request Autenticação de usuários (application/json)
     + Attributes
-        <!-- include(../../requests/sessions/sessionStore.apib) -->
+        <!-- include(../../data/sessionCreate.apib) -->
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
     + Attributes
-        <!-- include(../../responses/sessions/sessionStore.apib) -->
+        <!-- include(../../data/userList.apib) -->
 
 + Response 400 (application/json)
     + Attributes
         <!-- include(../../util/errorValidation.apib) -->
+
++ Response 401 (application/json)
+    + Attributes
+        + error: Password does not match
+
++ Response 404 (application/json)
+    + Attributes
+        + error: User not found

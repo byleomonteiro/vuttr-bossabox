@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "nodemon ./src/server.js",
     "debug": "nodemon --inspect ./src/server",
-    "pretest": "NODE_ENV=test sequelize db:migrate",
-    "test": "NODE_ENV=test jest --runInBand --forceExit",
-    "posttest": "NODE_ENV=test sequelize db:migrate:undo:all",
+    "pretest": "NODE_ENV=development sequelize db:migrate",
+    "test": "NODE_ENV=development jest --runInBand --forceExit",
+    "posttest": "NODE_ENV=development sequelize db:migrate:undo:all",
     "aglio": "aglio -i docs/api/index.apib --theme-variables slate -o docs/index.html"
   },
   "dependencies": {
@@ -16,7 +16,6 @@
     "bcryptjs": "^2.4.3",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "express-async-errors": "^3.1.1",
     "express-brute": "^1.0.1",
     "express-brute-redis": "^0.0.1",
     "express-rate-limit": "^5.1.1",
@@ -29,7 +28,6 @@
     "rate-limit-redis": "^1.7.0",
     "redis": "^3.0.2",
     "sequelize": "^5.21.5",
-    "youch": "^2.0.10",
     "yup": "^0.28.3"
   },
   "devDependencies": {

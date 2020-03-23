@@ -1,4 +1,5 @@
 import Icon from '../models/Icon';
+import RemoveFile from '../services/RemoveFile';
 
 class IconController {
     async store(req, res) {
@@ -21,8 +22,9 @@ class IconController {
         const icon = await Icon.findByPk(req.params.id);
 
         if (!icon) {
-            return res.status(400).json({ error: 'Icon does not exists' });
+            return res.status(404).json({ error: 'Icon not found' });
         }
+        await RemoveFile(icon.path);
         await icon.destroy();
         return res.status(204).send();
     }

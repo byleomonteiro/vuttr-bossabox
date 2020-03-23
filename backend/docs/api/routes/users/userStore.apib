@@ -3,12 +3,19 @@ Rota responsável por criar uma novo usuário na base de dados.
 
 + Request Criação de usuários (application/json)
     + Attributes
-        <!-- include(../../requests/users/userStore.apib) -->
+        <!-- include(../../data/userRequired.apib) -->
 
 + Response 201 (application/json)
     + Attributes
-        <!-- include(../../responses/users/userStore.apib) -->
+        <!-- include(../../data/userList.apib) -->
 
 + Response 400 (application/json)
     + Attributes
-        <!-- include(../../util/errorValidation.apib) -->
+        + caso 1 (object)
+            + error: User already exists
+        + caso 2 (object)
+            <!-- include(../../util/errorValidation.apib) -->
+
++ Response 401 (application/json)
+    + Attributes
+        <!-- include(../../util/errorTokenNotProvided.apib) -->

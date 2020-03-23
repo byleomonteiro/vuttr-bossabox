@@ -35,7 +35,7 @@ describe('Session', () => {
     it('should not be able to log in when user not exists', async () => {
         const user = await factory.attrs('Session');
         const response = await request.post('/v1/sessions').send(user);
-        expect(response.status).toBe(400);
+        expect(response.status).toBe(404);
     });
 
     it('should not be able to log in when password is wrong', async () => {
@@ -53,5 +53,27 @@ describe('Session', () => {
             password: `wrong${user.password}`,
         });
         expect(response.status).toBe(401);
+    });
+
+    it('should not be able to request if token not provided', async () => {
+        const user = await factory.attrs('UserCreate');
+        const response = await request.post('/v1/users').send(user);
+
+        expect(response.status).toBe(401);
+    });
+
+    it('should not be able to request if the token is invalid', async () => {
+        const user = await factory.attrs('UserCreate');
+        const response = await request
+            .post('/v1/users')
+            .send(user)
+            .set('Authorization', `Bearer invalid ${token}`);
+
+        expect(response.status).toBe(401);
+    });
+
+    it('should not be able make requests in invalid routes', async () => {
+        const response = await request.post('/invalid');
+        expect(response.status).toBe(404);
     });
 });
