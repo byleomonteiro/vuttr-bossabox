@@ -1,0 +1,16 @@
+### Excluir usuários [DELETE /v1/users/{id}]
+Rota responsável por excluir usuários do sistema.
+
++ Parameters
+    + id: id (number, required) - ID do usuário
+
+
++ Response 204 (No content)
+
++ Response 401 (application/json)
+    + Attributes
+        <!-- include(../../util/errorTokenNotProvided.apib) -->
+
++ Response 404 (application/json)
+    + Attributes
+        + error: User not found

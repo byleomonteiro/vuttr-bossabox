@@ -1,0 +1,16 @@
+### Pesquisar ferramenta por tag  [GET /v1/tools/{?tag}]
+Rota responsável por listar ferramentas por tag pesquisada.
++ Parameters
+    + tag: tagdaferramenta (string, required) - Tag para pesquisa
+
++ Response 200 (application/json)
+    + Attributes
+        <!-- include(../../data/toolList.apib) -->
+
++ Response 401 (application/json)
+    + Attributes
+        <!-- include(../../util/errorTokenNotProvided.apib) -->
+
++ Response 404 (application/json)
+    + Attributes
+        + error: Tag not found

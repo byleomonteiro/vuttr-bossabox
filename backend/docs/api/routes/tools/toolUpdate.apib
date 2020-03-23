@@ -1,0 +1,30 @@
+### Atualizar ferramentas [PUT /v1/tools/{id}]
+Rota responsável por atualizar informações de ferramentas.
+
+
++ Parameters
+    + id: id (number, required) - ID da ferramenta
+
+
++ Request Atualizar ferramentas (application/json)
+    + Attributes
+        <!-- include(../../data/toolOptional.apib) -->
+
++ Response 200 (application/json)
+    + Attributes
+        <!-- include(../../data/toolResUpdate.apib) -->
+
++ Response 400 (application/json)
+    + Attributes
+        <!-- include(../../util/errorValidation.apib) -->
+
++ Response 401 (application/json)
+    + Attributes
+        <!-- include(../../util/errorTokenNotProvided.apib) -->
+
++ Response 404 (application/json)
+    + Attributes
+        + caso 1 (object)
+            + error: Icon not found
+        + caso 2 (object)
+            + error2: Tool not found

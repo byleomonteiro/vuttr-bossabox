@@ -1,0 +1,15 @@
+### Excluir ferramentas [DELETE /v1/tools/{id}]
+Rota responsável por excluir ícones do sistema.
+
++ Parameters
+    + id: id (number, required) - ID da ferramenta
+
++ Response 204 (No content)
+
++ Response 401 (application/json)
+    + Attributes
+        <!-- include(../../util/errorTokenNotProvided.apib) -->
+
++ Response 404 (application/json)
+    + Attributes
+        + error: Tool not found

@@ -1,0 +1,33 @@
+### Atualizar usuários [PUT /v1/users{id}]
+Rota responsável por atualizar dados de usuários.
+
++ Parameters
+    + id: id (number, required) - ID do usuário
+
++ Request Atualizar usuários (application/json)
+    + Attributes
+        <!-- include(../../data/userUpdate.apib) -->
+
++ Response 200 (application/json)
+    + Attributes
+        <!-- include(../../data/userList.apib) -->
+
++ Response 400 (application/json)
+    + Attributes
+        + caso 1 (object)
+            <!-- include(../../util/errorValidation.apib) -->
+        + caso 2 (object)
+            + error: Email is already in use
+
+
++ Response 401 (application/json)
+    + Attributes
+        + caso 1 (object)
+            <!-- include(../../util/errorTokenNotProvided.apib) -->
+        + caso 2 (object)
+            + error: Password does not match
+
++ Response 404 (application/json)
+    + Attributes
+        + error: User not found
+
