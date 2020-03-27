@@ -19,7 +19,7 @@ describe('User', () => {
     request = request(app);
 
     it('should encrypt user password when new user created', async () => {
-        const user = await factory.create('UserCreate', {
+        const user = await factory.create('User', {
             password: '12345678',
         });
 
@@ -32,7 +32,7 @@ describe('User', () => {
     });
 
     it('should be able to register', async () => {
-        const user = await factory.attrs('UserCreate');
+        const user = await factory.attrs('User');
         const response = await request
             .post('/v1/users')
             .send(user)
@@ -43,7 +43,7 @@ describe('User', () => {
     });
 
     it('should be able to return all users', async () => {
-        const user = await factory.attrs('UserCreate');
+        const user = await factory.attrs('User');
         const create = await request
             .post('/v1/users')
             .send(user)
@@ -58,7 +58,7 @@ describe('User', () => {
     });
 
     it('should not be able to register with duplicated email', async () => {
-        const user = await factory.attrs('UserCreate');
+        const user = await factory.attrs('User');
         const create = await request
             .post('/v1/users')
             .send(user)
@@ -74,33 +74,114 @@ describe('User', () => {
     });
 
     it('should not be able to update password with a wrong old password', async () => {
-        /* const { oldPassword, password, confirmPassword } = await factory.attrs(
-            'UserUpdate'
-        );
-        const response = await request
-            .put('/v1/users')
-            .send({
-                oldPassword,
-                password,
-                confirmPassword,
-            })
-            .set('Authorization', `Bearer ${token}`);
-        expect(response.status).toBe(401); */
-    });
-    it('should be able to update a user', async () => {});
-    it('should not be able to update with a existing mail', async () => {});
-
-    it('should be able to delete user', async () => {
-        const user = await factory.attrs('UserCreate');
+        const { name, email, password } = await factory.attrs('User');
         const create = await request
             .post('/v1/users')
-            .send(user)
+            .send({
+                name,
+                email,
+                password: '987654321',
+            })
             .set('Authorization', `Bearer ${token}`);
 
         expect(create.status).toBe(201);
 
         const response = await request
-            .delete('/v1/users/5')
+            .put(`/v1/users/${create.body.user.id}`)
+            .send({
+                name,
+                email: 'test@email.com',
+                oldPassword: password,
+                password: '123456789',
+                confirmPassword: '123456789',
+            })
+            .set('Authorization', `Bearer ${token}`);
+
+        expect(response.status).toBe(401);
+        expect(response.body).toHaveProperty('error');
+    });
+
+    it('should be able to update a user', async () => {
+        const { name, email, password } = await factory.attrs('User');
+        const create = await request
+            .post('/v1/users')
+            .send({
+                name,
+                email,
+                password,
+            })
+            .set('Authorization', `Bearer ${token}`);
+
+        expect(create.status).toBe(201);
+
+        const response = await request
+            .put(`/v1/users/${create.body.user.id}`)
+            .send({
+                name,
+                email: 'test@email.com',
+                oldPassword: password,
+                password: '123456789',
+                confirmPassword: '123456789',
+            })
+            .set('Authorization', `Bearer ${token}`);
+
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveProperty('id');
+        expect(response.body).toHaveProperty('name');
+        expect(response.body).toHaveProperty('email');
+    });
+
+    it('should not be able to update with a existing mail', async () => {
+        const { name, password } = await factory.attrs('User');
+        const create = await request
+            .post('/v1/users')
+            .send({
+                name,
+                email: 'test@mail.com',
+                password,
+            })
+            .set('Authorization', `Bearer ${token}`);
+
+        expect(create.status).toBe(201);
+
+        const response = await request
+            .put(`/v1/users/${create.body.user.id}`)
+            .send({
+                email: 'test@mail.com',
+            })
+            .set('Authorization', `Bearer ${token}`);
+
+        expect(response.status).toBe(400);
+        expect(response.body).toHaveProperty('error');
+    });
+
+    it('should not be able to update if user not exists', async () => {
+        const response = await request
+            .put('/v1/users/0')
+            .send({
+                email: 'test@mail.com',
+            })
+            .set('Authorization', `Bearer ${token}`);
+
+        expect(response.status).toBe(404);
+        expect(response.body).toHaveProperty('error');
+    });
+
+    it('should be able to delete user', async () => {
+        const { name, email, password } = await factory.attrs('User');
+        const create = await request
+            .post('/v1/users')
+            .send({
+                name,
+                email,
+                password,
+            })
+            .set('Authorization', `Bearer ${token}`);
+
+        expect(create.status).toBe(201);
+
+        const response = await request
+            .delete(`/v1/users/${create.body.user.id}`)
             .set('Authorization', `Bearer ${token}`);
         expect(response.status).toBe(204);
     });

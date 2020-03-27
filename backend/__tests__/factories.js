@@ -9,18 +9,10 @@ factory.define('Session', User, {
     password: faker.internet.password(),
 });
 
-factory.define('UserCreate', User, {
+factory.define('User', User, {
     name: faker.name.findName(),
     email: faker.internet.email(),
     password: faker.internet.password(),
-});
-
-factory.define('UserUpdate', User, {
-    name: faker.name.findName(),
-    email: faker.internet.email(),
-    password: faker.internet.password(),
-    oldPassword: faker.internet.password(),
-    confirmPassword: faker.internet.password(),
 });
 
 factory.define('Tool', Tool, {
