@@ -28,7 +28,7 @@ class App {
             express.static(resolve(__dirname, '..', 'tmp', 'uploads'))
         );
 
-        if (process.env.NODE_ENV !== 'development') {
+        if (process.env.NODE_ENV === 'production') {
             this.server.use(
                 new RateLimit({
                     store: new RateLimitRedis({

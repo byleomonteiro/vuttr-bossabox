@@ -1,15 +1,20 @@
+# => Node modules
 node_modules/
 
+# => Dist directory - only on production
 dist
 
+# => Enviroment variables
 .env
+.env.test
 
+# => Code Coverage files
 __tests__/coverage
 
+# => Upload files
 tmp/uploads/*
 
-__tests__/db.sqlite
-
+# => .lock files
 yarn.lock
-
 package-lock.json
+

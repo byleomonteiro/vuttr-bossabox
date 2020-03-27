@@ -1,6 +1,11 @@
 import { Router } from 'express';
+
+/** => uncomment to use brute fornce prevente in production
+
 import Brute from 'express-brute';
 import BruteRedis from 'express-brute-redis';
+
+*/
 import multer from 'multer';
 
 import multerConfig from './config/multer';
@@ -21,12 +26,16 @@ import validateToolUpdate from './app/validations/ToolUpdate';
 const routes = new Router();
 const upload = multer(multerConfig);
 
-const bruteStore = new BruteRedis({
+/** => Uncomment to use brute force in production
+
+    const bruteStore = new BruteRedis({
     host: process.env.REDIS_HOST,
     port: process.env.REDIS_PORT,
 });
 
 const BruteForce = new Brute(bruteStore);
+
+*/
 
 // => Mail route
 routes.get('/', ({ res }) => {
@@ -36,17 +45,22 @@ routes.get('/', ({ res }) => {
 // => Authentication route
 routes.post(
     '/sessions',
-    // BruteForce.prevent,
+
+    /** => uncomment to use brute force prevent in production
+         BruteForce.prevent,
+    */
     validateSessionStore,
     SessionController.store
 );
+
+// => Create user route
+routes.post('/users', validateUserStore, UserController.store);
 
 // => Auth Middleware
 routes.use(authMiddleware);
 
 // => Users routes
 routes.get('/users', UserController.index);
-routes.post('/users', validateUserStore, UserController.store);
 routes.put('/users/:id', validateUserUpdate, UserController.update);
 routes.delete('/users/:id', UserController.destroy);
 
