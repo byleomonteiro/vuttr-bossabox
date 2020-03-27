@@ -6,14 +6,12 @@ import truncate from '../util/truncate';
 
 import auth from '../util/auth';
 
-import Icon from '../../src/app/models/Icon';
-
 import RemoveFile from '../../src/app/services/RemoveFile';
 
 let token;
 
 describe('Icon', () => {
-    beforeAll(async () => {
+    beforeEach(async () => {
         await truncate();
         token = await auth();
     });
@@ -44,9 +42,16 @@ describe('Icon', () => {
     });
 
     it('should be able to delete an icon', async () => {
-        const icon = await Icon.findOne({});
+        const iconPath = resolve(__dirname, 'iconsTest', 'icon.jpg');
+        const create = await request
+            .post('/v1/icons')
+            .attach('file', iconPath)
+            .set('Authorization', `Bearer ${token}`);
+
+        await RemoveFile(create.body.path);
+
         const response = await request
-            .delete(`/v1/icons/${icon.id}`)
+            .delete(`/v1/icons/${create.body.id}`)
             .set('Authorization', `Bearer ${token}`);
         expect(response.status).toBe(204);
     });

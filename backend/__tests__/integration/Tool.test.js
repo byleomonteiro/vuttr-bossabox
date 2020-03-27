@@ -11,7 +11,7 @@ import RemoveFile from '../../src/app/services/RemoveFile';
 let token;
 
 describe('Tool', () => {
-    beforeAll(async () => {
+    beforeEach(async () => {
         await truncate();
         token = await auth();
     });
@@ -19,20 +19,12 @@ describe('Tool', () => {
     request = request(app);
 
     it('should be able to register a new tool', async () => {
-        const { icon_id, title, link, description, tags } = await factory.attrs(
-            'Tool'
-        );
-        const tool = await request
+        const tool = await factory.attrs('Tool');
+        const response = await request
             .post('/v1/tools')
-            .send({
-                icon_id,
-                title,
-                link,
-                description,
-                tags,
-            })
+            .send(tool)
             .set('Authorization', `Bearer ${token}`);
-        expect(tool.status).toBe(201);
+        expect(response.status).toBe(201);
     });
 
     it('should not be able to insert an icon if not exists', async () => {
@@ -57,17 +49,31 @@ describe('Tool', () => {
         expect(response.status).toBe(200);
     });
     it('should be able to search tools by tag', async () => {
+        const tool = await factory.attrs('Tool');
+        const create = await request
+            .post('/v1/tools')
+            .send(tool)
+            .set('Authorization', `Bearer ${token}`);
+        expect(create.status).toBe(201);
+
         const response = await request
             .get('/v1/find')
-            .query({ tag: 'node' })
+            .query({ tag: create.body.tags[0] })
             .set('Authorization', `Bearer ${token}`);
         expect(response.status).toBe(200);
     });
 
     it('should be able to update a tool by id', async () => {
         const tool = await factory.attrs('Tool');
+
+        const create = await request
+            .post('/v1/tools')
+            .send(tool)
+            .set('Authorization', `Bearer ${token}`);
+        expect(create.status).toBe(201);
+
         const response = await request
-            .put('/v1/tools/1')
+            .put(`/v1/tools/${create.body.id}`)
             .send(tool)
             .set('Authorization', `Bearer ${token}`);
         expect(response.status).toBe(200);
@@ -103,8 +109,15 @@ describe('Tool', () => {
     });
 
     it('should be able to delete a tool by id', async () => {
+        const tool = await factory.attrs('Tool');
+        const create = await request
+            .post('/v1/tools')
+            .send(tool)
+            .set('Authorization', `Bearer ${token}`);
+        expect(create.status).toBe(201);
+
         const response = await request
-            .delete('/v1/tools/1')
+            .delete(`/v1/tools/${create.body.id}`)
             .set('Authorization', `Bearer ${token}`);
         expect(response.status).toBe(204);
     });

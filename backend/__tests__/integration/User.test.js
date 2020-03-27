@@ -33,10 +33,7 @@ describe('User', () => {
 
     it('should be able to register', async () => {
         const user = await factory.attrs('User');
-        const response = await request
-            .post('/v1/users')
-            .send(user)
-            .set('Authorization', `Bearer ${token}`);
+        const response = await request.post('/v1/users').send(user);
 
         expect(response.status).toBe(201);
         expect(response.body).toHaveProperty('user');
@@ -44,10 +41,7 @@ describe('User', () => {
 
     it('should be able to return all users', async () => {
         const user = await factory.attrs('User');
-        const create = await request
-            .post('/v1/users')
-            .send(user)
-            .set('Authorization', `Bearer ${token}`);
+        const create = await request.post('/v1/users').send(user);
 
         expect(create.status).toBe(201);
 
@@ -59,30 +53,22 @@ describe('User', () => {
 
     it('should not be able to register with duplicated email', async () => {
         const user = await factory.attrs('User');
-        const create = await request
-            .post('/v1/users')
-            .send(user)
-            .set('Authorization', `Bearer ${token}`);
+        const create = await request.post('/v1/users').send(user);
 
         expect(create.status).toBe(201);
 
-        const response = await request
-            .post('/v1/users')
-            .send(user)
-            .set('Authorization', `Bearer ${token}`);
+        const response = await request.post('/v1/users').send(user);
+
         expect(response.status).toBe(400);
     });
 
     it('should not be able to update password with a wrong old password', async () => {
         const { name, email, password } = await factory.attrs('User');
-        const create = await request
-            .post('/v1/users')
-            .send({
-                name,
-                email,
-                password: '987654321',
-            })
-            .set('Authorization', `Bearer ${token}`);
+        const create = await request.post('/v1/users').send({
+            name,
+            email,
+            password: '987654321',
+        });
 
         expect(create.status).toBe(201);
 
@@ -103,14 +89,11 @@ describe('User', () => {
 
     it('should be able to update a user', async () => {
         const { name, email, password } = await factory.attrs('User');
-        const create = await request
-            .post('/v1/users')
-            .send({
-                name,
-                email,
-                password,
-            })
-            .set('Authorization', `Bearer ${token}`);
+        const create = await request.post('/v1/users').send({
+            name,
+            email,
+            password,
+        });
 
         expect(create.status).toBe(201);
 
@@ -133,14 +116,11 @@ describe('User', () => {
 
     it('should not be able to update with a existing mail', async () => {
         const { name, password } = await factory.attrs('User');
-        const create = await request
-            .post('/v1/users')
-            .send({
-                name,
-                email: 'test@mail.com',
-                password,
-            })
-            .set('Authorization', `Bearer ${token}`);
+        const create = await request.post('/v1/users').send({
+            name,
+            email: 'test@mail.com',
+            password,
+        });
 
         expect(create.status).toBe(201);
 
@@ -157,7 +137,7 @@ describe('User', () => {
 
     it('should not be able to update if user not exists', async () => {
         const response = await request
-            .put('/v1/users/0')
+            .put('/v1/users/60')
             .send({
                 email: 'test@mail.com',
             })
@@ -169,14 +149,11 @@ describe('User', () => {
 
     it('should be able to delete user', async () => {
         const { name, email, password } = await factory.attrs('User');
-        const create = await request
-            .post('/v1/users')
-            .send({
-                name,
-                email,
-                password,
-            })
-            .set('Authorization', `Bearer ${token}`);
+        const create = await request.post('/v1/users').send({
+            name,
+            email,
+            password,
+        });
 
         expect(create.status).toBe(201);
 

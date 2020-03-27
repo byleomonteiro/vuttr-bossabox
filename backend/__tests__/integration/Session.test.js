@@ -33,8 +33,11 @@ describe('Session', () => {
     });
 
     it('should not be able to log in when user not exists', async () => {
-        const user = await factory.attrs('Session');
-        const response = await request.post('/v1/sessions').send(user);
+        const user = await factory.attrs('User');
+        const response = await request.post('/v1/sessions').send({
+            email: user.email,
+            password: user.password,
+        });
         expect(response.status).toBe(404);
     });
 
@@ -56,17 +59,15 @@ describe('Session', () => {
     });
 
     it('should not be able to request if token not provided', async () => {
-        const user = await factory.attrs('User');
-        const response = await request.post('/v1/users').send(user);
+        const response = await request.get('/v1/users');
 
         expect(response.status).toBe(401);
     });
 
     it('should not be able to request if the token is invalid', async () => {
-        const user = await factory.attrs('User');
         const response = await request
-            .post('/v1/users')
-            .send(user)
+            .get('/v1/users')
+
             .set('Authorization', `Bearer invalid ${token}`);
 
         expect(response.status).toBe(401);
