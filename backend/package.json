@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "nodemon ./src/server.js",
     "debug": "nodemon --inspect ./src/server",
-    "pretest": "NODE_ENV=development sequelize db:migrate",
-    "test": "NODE_ENV=development jest --runInBand --forceExit",
-    "posttest": "NODE_ENV=development sequelize db:migrate:undo:all",
+    "pretest": "NODE_ENV=test sequelize db:migrate",
+    "test": "NODE_ENV=test jest --runInBand --forceExit",
+    "posttest": "NODE_ENV=test sequelize db:migrate:undo:all",
     "aglio": "aglio -i docs/api/index.apib --theme-variables slate -o docs/index.html"
   },
   "dependencies": {
