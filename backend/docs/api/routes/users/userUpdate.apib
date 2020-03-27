@@ -4,6 +4,11 @@ Rota responsável por atualizar dados de usuários.
 + Parameters
     + id: id (number, required) - ID do usuário
 
++ Request Bearer Token
+    + Headers
+
+            Authorization: Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==
+
 + Request Atualizar usuários (application/json)
     + Attributes
         <!-- include(../../data/userUpdate.apib) -->
@@ -18,6 +23,8 @@ Rota responsável por atualizar dados de usuários.
             <!-- include(../../util/errorValidation.apib) -->
         + caso 2 (object)
             + error: Email is already in use
+        + caso 3 (object)
+            + error: This is your current email try another
 
 
 + Response 401 (application/json)
