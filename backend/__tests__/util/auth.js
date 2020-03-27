@@ -6,7 +6,7 @@ import app from '../../src/app';
 request = request(app);
 
 const token = async () => {
-    const user = await factory.attrs('UserCreate');
+    const user = await factory.attrs('User');
     await request.post('/users').send(user);
 
     const login = await request.post('/sessions').send({

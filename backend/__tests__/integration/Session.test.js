@@ -15,7 +15,7 @@ describe('Session', () => {
     request = request(app);
 
     it('should be able to log in', async () => {
-        const user = await factory.attrs('UserCreate');
+        const user = await factory.attrs('User');
         const create = await request
             .post('/v1/users')
             .send(user)
@@ -39,7 +39,7 @@ describe('Session', () => {
     });
 
     it('should not be able to log in when password is wrong', async () => {
-        const user = await factory.attrs('UserCreate');
+        const user = await factory.attrs('User');
 
         const create = await request
             .post('/v1/users')
@@ -56,14 +56,14 @@ describe('Session', () => {
     });
 
     it('should not be able to request if token not provided', async () => {
-        const user = await factory.attrs('UserCreate');
+        const user = await factory.attrs('User');
         const response = await request.post('/v1/users').send(user);
 
         expect(response.status).toBe(401);
     });
 
     it('should not be able to request if the token is invalid', async () => {
-        const user = await factory.attrs('UserCreate');
+        const user = await factory.attrs('User');
         const response = await request
             .post('/v1/users')
             .send(user)
