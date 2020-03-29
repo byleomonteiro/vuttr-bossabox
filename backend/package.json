@@ -9,8 +9,10 @@
     "pretest": "NODE_ENV=test sequelize db:migrate",
     "test": "NODE_ENV=test jest --runInBand --forceExit",
     "posttest": "NODE_ENV=test sequelize db:migrate:undo:all",
-    "doc": "aglio -i docs/api/index.apib --theme-variables slate -o docs/index.html"
-  },
+    "doc": "aglio -i docs/api/index.apib --theme-variables slate -o docs/index.html",
+    "build": "sucrase ./src -d ./dist --transforms imports",
+    "start": "node dist/server.js"
+},
   "dependencies": {
     "aglio": "^2.3.0",
     "bcryptjs": "^2.4.3",
