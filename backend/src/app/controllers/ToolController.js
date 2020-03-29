@@ -2,56 +2,27 @@ import { Op } from 'sequelize';
 import Tool from '../models/Tool';
 import Icon from '../models/Icon';
 
-import Cache from '../../lib/Cache';
-
 import RemoveFile from '../services/RemoveFile';
 
 class ToolController {
-    async index({ res }) {
-        const cached = await Cache.get('tools');
+    async index(req, res) {
+        const { query } = req;
 
-        if (cached) return res.json(cached);
+        const where = {};
 
-        const tools = await Tool.findAll({
-            attributes: [
-                'icon_id',
-                'id',
-                'title',
-                'link',
-                'description',
-                'tags',
-            ],
-            include: [
-                {
-                    model: Icon,
-                    as: 'icon',
-                    attributes: ['path', 'url'],
-                },
-            ],
-        });
+        if (query.tag) {
+            where.tags = {
+                [Op.contains]: [query.tag],
+            };
+        }
 
-        await Cache.set('tools', tools);
-
-        return res.json(tools);
-    }
-
-    async show(req, res) {
-        const { tag } = req.query;
+        if (query.user_id) {
+            where.user_id = query.user_id;
+        }
 
         const find = await Tool.findAll({
-            where: {
-                tags: {
-                    [Op.contains]: [tag],
-                },
-            },
-            attributes: [
-                'icon_id',
-                'id',
-                'title',
-                'link',
-                'description',
-                'tags',
-            ],
+            where,
+            attributes: ['id', 'title', 'link', 'description', 'tags'],
             include: [
                 {
                     model: Icon,
@@ -62,14 +33,14 @@ class ToolController {
         });
 
         if (find.length < 1) {
-            return res.status(404).json({ error: 'Tag not found' });
+            return res.status(404).json({ error: 'No data was found' });
         }
 
         return res.json(find);
     }
 
     async store(req, res) {
-        const { icon_id } = req.body;
+        const { icon_id, title, link, description, tags } = req.body;
 
         if (icon_id) {
             const iconExists = await Icon.findByPk(icon_id);
@@ -78,19 +49,18 @@ class ToolController {
             }
         }
 
-        const { id, title, link, description, tags } = await Tool.create(
-            req.body
-        );
-
-        const checkCache = await Cache.get('tools');
-
-        if (checkCache) {
-            await Cache.invalidate('tools');
-        }
+        const { id } = await Tool.create({
+            user_id: req.userId,
+            icon_id,
+            title,
+            link,
+            description,
+            tags,
+        });
 
         return res.status(201).json({
-            icon_id,
             id,
+            icon_id,
             title,
             link,
             description,
@@ -109,6 +79,9 @@ class ToolController {
         }
 
         const tool = await Tool.findByPk(req.params.id, {
+            where: {
+                user_id: req.userId,
+            },
             attributes: ['id', 'title', 'link', 'description', 'tags'],
             include: [
                 {
@@ -129,7 +102,11 @@ class ToolController {
     }
 
     async destroy(req, res) {
-        const tool = await Tool.findByPk(req.params.id, {
+        const tool = await Tool.findOne({
+            where: {
+                id: req.params.id,
+                user_id: req.userId,
+            },
             include: [
                 {
                     model: Icon,
@@ -150,11 +127,6 @@ class ToolController {
         }
 
         await tool.destroy();
-
-        const checkCache = await Cache.get('tools');
-        if (checkCache) {
-            await Cache.invalidate('tools');
-        }
 
         return res.status(204).send();
     }

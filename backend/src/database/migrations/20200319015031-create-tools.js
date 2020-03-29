@@ -7,6 +7,13 @@ module.exports = {
                 autoIncrement: true,
                 allowNull: false,
             },
+            user_id: {
+                type: Sequelize.INTEGER,
+                references: { model: 'users', key: 'id' },
+                allowNull: false,
+                onUpdate: 'CASCADE',
+                onDelete: 'CASCADE',
+            },
             icon_id: {
                 type: Sequelize.INTEGER,
                 references: { model: 'icons', key: 'id' },
