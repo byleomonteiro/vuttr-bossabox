@@ -6,13 +6,19 @@ import Tool from '../src/app/models/Tool';
 
 factory.define('User', User, {
     name: faker.name.findName(),
+    bio: faker.lorem.paragraph(),
     email: faker.internet.email(),
+    url: faker.internet.url(),
+    techs: ['PHP', 'Laravel'],
     password: faker.internet.password(),
 });
 
 factory.define('Sessions', User, {
     name: faker.name.findName(),
+    bio: faker.lorem.paragraph(),
     email: faker.internet.email(),
+    url: faker.internet.url(),
+    techs: ['Python', 'Django'],
     password: faker.internet.password(),
 });
 

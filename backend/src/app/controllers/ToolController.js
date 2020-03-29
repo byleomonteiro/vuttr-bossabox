@@ -1,6 +1,7 @@
 import { Op } from 'sequelize';
 import Tool from '../models/Tool';
 import Icon from '../models/Icon';
+import User from '../models/User';
 
 import RemoveFile from '../services/RemoveFile';
 
@@ -24,6 +25,11 @@ class ToolController {
             where,
             attributes: ['id', 'title', 'link', 'description', 'tags'],
             include: [
+                {
+                    model: User,
+                    as: 'user',
+                    attributes: ['name', 'url'],
+                },
                 {
                     model: Icon,
                     as: 'icon',

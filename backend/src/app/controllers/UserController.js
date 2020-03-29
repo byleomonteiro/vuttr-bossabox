@@ -1,10 +1,27 @@
+import { Op } from 'sequelize';
 import User from '../models/User';
 
 class UserController {
-    async index({ res }) {
+    async index(req, res) {
+        const { tech } = req.query;
+
+        const where = {};
+
+        if (tech) {
+            where.techs = {
+                [Op.contains]: [tech],
+            };
+        }
+
         const users = await User.findAll({
-            attributes: ['id', 'name', 'email'],
+            where,
+            attributes: ['id', 'name', 'bio', 'email', 'url', 'techs'],
         });
+
+        if (users.length < 1) {
+            return res.status(404).json({ error: 'No data was found' });
+        }
+
         return res.json(users);
     }
 
@@ -16,12 +33,15 @@ class UserController {
             return res.status(400).json({ error: 'User already exists' });
         }
 
-        const { id, name } = await User.create(req.body);
+        const { id, name, bio, url, techs } = await User.create(req.body);
 
         return res.status(201).json({
             id,
             name,
+            bio,
             email,
+            url,
+            techs,
         });
     }
 
@@ -43,12 +63,15 @@ class UserController {
             return res.status(401).json({ error: 'Password does not match' });
         }
 
-        const { id, name } = await user.update(req.body);
+        const { id, name, bio, url, techs } = await user.update(req.body);
 
         return res.json({
             id,
             name,
+            bio,
             email,
+            url,
+            techs,
         });
     }
 }

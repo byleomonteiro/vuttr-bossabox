@@ -14,6 +14,9 @@ dist
 # => code coverage files
 __tests__/coverage
 
+# => generated html by documentation
+docs/index.html
+
 # => upload files
 tmp/uploads/*
 

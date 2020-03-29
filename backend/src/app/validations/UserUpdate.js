@@ -5,6 +5,9 @@ export default async (req, res, next) => {
         const schema = Yup.object().shape({
             name: Yup.string(),
             email: Yup.string().email(),
+            bio: Yup.string(),
+            url: Yup.string().url(),
+            techs: Yup.array().min(1),
             oldPassword: Yup.string(),
             password: Yup.string()
                 .min(8)

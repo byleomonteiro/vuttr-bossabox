@@ -16,6 +16,18 @@ module.exports = {
                 allowNull: false,
                 unique: true,
             },
+            bio: {
+                type: Sequelize.TEXT,
+                allowNull: true,
+            },
+            url: {
+                type: Sequelize.STRING,
+                allowNull: false,
+            },
+            techs: {
+                type: Sequelize.ARRAY(Sequelize.TEXT),
+                allowNull: false,
+            },
             password_hash: {
                 type: Sequelize.STRING,
                 allowNull: false,

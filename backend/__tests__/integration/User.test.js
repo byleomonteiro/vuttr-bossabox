@@ -39,7 +39,10 @@ describe('User', () => {
         expect(response.body).toMatchObject({
             id: response.body.id,
             name: response.body.name,
+            bio: response.body.bio,
             email: response.body.email,
+            url: response.body.url,
+            techs: response.body.techs,
         });
     });
 
@@ -57,6 +60,35 @@ describe('User', () => {
         expect(response.body).toMatchObject(
             response.body.map(object => object)
         );
+    });
+
+    it('should be able to find users by used techs', async () => {
+        const user = await factory.attrs('User');
+        const create = await request.post('/v1/users').send(user);
+
+        expect(create.status).toBe(201);
+
+        const response = await request
+            .get('/v1/users')
+            .query({ tech: create.body.techs[0] })
+            .set('Authorization', `Bearer ${login.token}`);
+
+        expect(response.status).toBe(200);
+        expect(response.body).toMatchObject(
+            response.body.map(object => object)
+        );
+    });
+
+    it('should not be able to find users by techs if it does not exists', async () => {
+        const response = await request
+            .get('/v1/users')
+            .query({ tech: 'example' })
+            .set('Authorization', `Bearer ${login.token}`);
+
+        expect(response.status).toBe(404);
+        expect(response.body).toMatchObject({
+            error: 'No data was found',
+        });
     });
 
     it('should not be able to register with duplicated email', async () => {
@@ -96,6 +128,7 @@ describe('User', () => {
             .put('/v1/users')
             .send({
                 name: 'Teste',
+                bio: 'Software Tester',
                 email: 'test@email.com',
             })
             .set('Authorization', `Bearer ${login.token}`);
@@ -104,7 +137,10 @@ describe('User', () => {
         expect(response.body).toMatchObject({
             id: response.body.id,
             name: response.body.name,
+            bio: response.body.bio,
             email: response.body.email,
+            url: response.body.url,
+            techs: response.body.techs,
         });
     });
 

@@ -7,6 +7,13 @@ export default async (req, res, next) => {
             email: Yup.string()
                 .email()
                 .required(),
+            bio: Yup.string(),
+            url: Yup.string()
+                .url()
+                .required(),
+            techs: Yup.array()
+                .min(1)
+                .required(),
             password: Yup.string()
                 .min(8)
                 .required(),
