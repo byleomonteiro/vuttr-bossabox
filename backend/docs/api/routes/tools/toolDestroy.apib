@@ -1,13 +1,14 @@
 ### Excluir ferramentas [DELETE /v1/tools/{id}]
-Rota responsável por excluir ferramentas do sistema pelo seu id.
+
++ **Rota responsável por excluir ferramentas do sistema pelo seu id.**
+    + Obs: Quando uma ferramenta é removida da base de dados, seu ícone também é removido.
 
 + Parameters
     + id: id (number, required) - ID da ferramenta
 
-+ Request Deletar ferramenta
++ Request Excluir ferramenta
     + Headers
-
-            Authorization: Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==
+        <!-- include(../../util/authToken.apib) -->
 
 + Response 204 (No content)
 
