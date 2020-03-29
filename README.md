@@ -3,9 +3,10 @@
   <a href="https://github.com/Leon4rdoMonteiro">
     <img src="https://i.ibb.co/xH15P8V/VUTTR.png" width=300 height=300 alt="Logo">
   </a>
+<h1 align="center"> <b>📦 VUTTR-BOSSABOX </b></h1>
 </p>
 
-
+Autor: [Leonardo Monteiro](https://github.com/Leon4rdoMonteiro)
 #### 🚀 API desenvolvida em Node.js para teste na plataforma BossaBox.
 
    + 🌠 Foram utilizadas as tecnologias:
@@ -68,4 +69,3 @@ REDIS_PORT=6379
         - yarn/npm run build: Realiza build da aplicação.
         - yarn/npm run start: Executa projeto em produção.
 
-Autor: [Leonardo Monteiro](https://github.com/Leon4rdoMonteiro)
