@@ -13,7 +13,12 @@ const token = async () => {
         email: user.email,
         password: user.password,
     });
-    return login.body.token;
+
+    return {
+        id: login.body.user.id,
+        email: login.body.user.email,
+        token: login.body.token,
+    };
 };
 
 export default token;

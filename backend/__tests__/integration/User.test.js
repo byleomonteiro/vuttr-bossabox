@@ -8,12 +8,12 @@ import truncate from '../util/truncate';
 import factory from '../factories';
 import auth from '../util/auth';
 
-let token;
+let login;
 
 describe('User', () => {
     beforeEach(async () => {
         await truncate();
-        token = await auth();
+        login = await auth();
     });
 
     request = request(app);
@@ -31,12 +31,16 @@ describe('User', () => {
         expect(compareHash).toBe(true);
     });
 
-    it('should be able to register', async () => {
+    it('should be able to register an user', async () => {
         const user = await factory.attrs('User');
         const response = await request.post('/v1/users').send(user);
 
         expect(response.status).toBe(201);
-        expect(response.body).toHaveProperty('user');
+        expect(response.body).toMatchObject({
+            id: response.body.id,
+            name: response.body.name,
+            email: response.body.email,
+        });
     });
 
     it('should be able to return all users', async () => {
@@ -47,8 +51,12 @@ describe('User', () => {
 
         const response = await request
             .get('/v1/users')
-            .set('Authorization', `Bearer ${token}`);
+            .set('Authorization', `Bearer ${login.token}`);
+
         expect(response.status).toBe(200);
+        expect(response.body).toMatchObject(
+            response.body.map(object => object)
+        );
     });
 
     it('should not be able to register with duplicated email', async () => {
@@ -60,106 +68,57 @@ describe('User', () => {
         const response = await request.post('/v1/users').send(user);
 
         expect(response.status).toBe(400);
+        expect(response.body).toMatchObject({
+            error: 'User already exists',
+        });
     });
 
     it('should not be able to update password with a wrong old password', async () => {
-        const { name, email, password } = await factory.attrs('User');
-        const create = await request.post('/v1/users').send({
-            name,
-            email,
-            password: '987654321',
-        });
-
-        expect(create.status).toBe(201);
-
         const response = await request
-            .put(`/v1/users/${create.body.user.id}`)
+            .put('/v1/users')
             .send({
-                name,
+                name: 'testing',
                 email: 'test@email.com',
-                oldPassword: password,
-                password: '123456789',
-                confirmPassword: '123456789',
+                oldPassword: '123456789',
+                password: '1234567890',
+                confirmPassword: '1234567890',
             })
-            .set('Authorization', `Bearer ${token}`);
+            .set('Authorization', `Bearer ${login.token}`);
 
         expect(response.status).toBe(401);
-        expect(response.body).toHaveProperty('error');
+        expect(response.body).toMatchObject({
+            error: 'Password does not match',
+        });
     });
 
     it('should be able to update a user', async () => {
-        const { name, email, password } = await factory.attrs('User');
-        const create = await request.post('/v1/users').send({
-            name,
-            email,
-            password,
-        });
-
-        expect(create.status).toBe(201);
-
         const response = await request
-            .put(`/v1/users/${create.body.user.id}`)
+            .put('/v1/users')
             .send({
-                name,
+                name: 'Teste',
                 email: 'test@email.com',
-                oldPassword: password,
-                password: '123456789',
-                confirmPassword: '123456789',
             })
-            .set('Authorization', `Bearer ${token}`);
+            .set('Authorization', `Bearer ${login.token}`);
 
         expect(response.status).toBe(200);
-        expect(response.body).toHaveProperty('id');
-        expect(response.body).toHaveProperty('name');
-        expect(response.body).toHaveProperty('email');
+        expect(response.body).toMatchObject({
+            id: response.body.id,
+            name: response.body.name,
+            email: response.body.email,
+        });
     });
 
-    it('should not be able to update with a existing mail', async () => {
-        const { name, password } = await factory.attrs('User');
-        const create = await request.post('/v1/users').send({
-            name,
-            email: 'test@mail.com',
-            password,
-        });
-
-        expect(create.status).toBe(201);
-
+    it('should not be able to update an user with a existing email', async () => {
         const response = await request
-            .put(`/v1/users/${create.body.user.id}`)
+            .put('/v1/users')
             .send({
-                email: 'test@mail.com',
+                email: login.email,
             })
-            .set('Authorization', `Bearer ${token}`);
+            .set('Authorization', `Bearer ${login.token}`);
 
         expect(response.status).toBe(400);
-        expect(response.body).toHaveProperty('error');
-    });
-
-    it('should not be able to update if user not exists', async () => {
-        const response = await request
-            .put('/v1/users/60')
-            .send({
-                email: 'test@mail.com',
-            })
-            .set('Authorization', `Bearer ${token}`);
-
-        expect(response.status).toBe(404);
-        expect(response.body).toHaveProperty('error');
-    });
-
-    it('should be able to delete user', async () => {
-        const { name, email, password } = await factory.attrs('User');
-        const create = await request.post('/v1/users').send({
-            name,
-            email,
-            password,
+        expect(response.body).toMatchObject({
+            error: 'Email is already in use',
         });
-
-        expect(create.status).toBe(201);
-
-        const response = await request
-            .delete(`/v1/users/${create.body.user.id}`)
-            .set('Authorization', `Bearer ${token}`);
-        expect(response.status).toBe(204);
     });
 });
