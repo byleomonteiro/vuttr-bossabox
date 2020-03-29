@@ -1,7 +1,14 @@
-### Listar todas as ferramentas [GET /v1/tools]
-Rota responsável por listar todas as ferramentas
+### Pesquisar ferramentas  [GET /v1/tools{?tag}{?user_id}]
 
-+ Request Bearer Token
+Rota responsável por listar todas as ferramentas ou listar por usuário ou tag.
+
+
++ Parameters
+    + tag: tagdaferramenta (string, optional) - Tag para pesquisa
+    + user_id: 1 (string, optional) - Usuário para pesquisa
+
+
++ Request Pesquisa de ferramentas
     + Headers
 
             Authorization: Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==
@@ -13,3 +20,7 @@ Rota responsável por listar todas as ferramentas
 + Response 401 (application/json)
     + Attributes
         <!-- include(../../util/errorTokenNotProvided.apib) -->
+
++ Response 404 (application/json)
+    + Attributes
+        + error: Tag not found
