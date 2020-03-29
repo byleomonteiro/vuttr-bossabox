@@ -1,17 +1,20 @@
-# => Node modules
+# => node modules
 node_modules/
 
-# => Dist directory - only on production
+# => vscode configs
+.vscode
+
+# => dist directory - only on production
 dist
 
-# => Enviroment variables
+# => enviroment variables
 .env
 .env.test
 
-# => Code Coverage files
+# => code coverage files
 __tests__/coverage
 
-# => Upload files
+# => upload files
 tmp/uploads/*
 
 # => .lock files
