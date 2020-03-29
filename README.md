@@ -1,7 +1,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/Leon4rdoMonteiro">
-    <img src="https://i.ibb.co/LSrPvD4/VUTTR-1.png" width=300 height=300 alt="Logo">
+    <img src="https://i.ibb.co/xH15P8V/VUTTR.png" width=300 height=300 alt="Logo">
   </a>
 </p>
 
