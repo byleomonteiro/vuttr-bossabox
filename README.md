@@ -7,6 +7,7 @@
 </p>
 
 Autor: [Leonardo Monteiro](https://github.com/Leon4rdoMonteiro)
+
 #### 🚀 API desenvolvida em Node.js para teste na plataforma BossaBox.
 
    + 🌠 Foram utilizadas as tecnologias:
@@ -28,13 +29,15 @@ Autor: [Leonardo Monteiro](https://github.com/Leon4rdoMonteiro)
         - Digital Ocean
         - CI/CD: Buddy Works
   
-   + 🌩 Aplicação hospedada para consumo [aqui](https://github.com/Leon4rdoMonteiro)
+   + 🌩 Aplicação hospedada para consumo [aqui](http://167.71.155.74/v1)
+        - Obs: Todas as rotas iniciam com o prefixo /v1
         
 
  ### 🖊 Configurações:
  
- Alterar variáveis de ambiente para conectar o banco de dados SQL ao Sequelize.
-
+ + Alterar variáveis de ambiente para conectar o banco de dados SQL ao Sequelize.
+   - Obs: Criar arquivos ```.env & .env.test```
+  
 ```js
 DB_HOST=
 DB_USER=
@@ -42,30 +45,43 @@ DB_PASS=
 DB_NAME=
 ```
 
-Alterar variáveis de ambiente para conectar a aplicação ao banco de dados Redis. 
++ Alterar variáveis de ambiente para conectar a aplicação ao banco de dados Redis. 
+  - Obs: Criar arquivos ```.env e .env.test```
 
 ```js
 REDIS_HOST=127.0.0.1
 REDIS_PORT=6379
+
 ```
+Usuário de teste para autenticar-se na API: 
+
+```js
+{
+  "email": "jhon@email.com",
+  "password: "12345678"
+}
+```
+
  ### 🏁 Instalação:
   
    ##### 1.Instalar todas as dependências:
-        yarn/npm i
+        yarn | npm i
    ##### 2. Criando e executando Docker Container:
         docker-compose up -d
-   ##### 3. Executar migrations:
-        yarn/npx sequelize db:migrate
-   ##### 4. Executar testes da aplicação:
-        yarn/npm run test
-   ##### 5. Executar API em ambiente de desenvolvimento, porta padrão 3333:
-        yarn/npm run dev*
-   ##### 6. Renderizando e visualizando documentação da API, porta padrão 3000:
-        yarn/npm run doc
-        yarn/npm run doc --server
+   ##### 3. Executar testes da aplicação:
+        yarn test | npm run test
+   ##### 4. Executar migrations:
+        yarn sequelize db:migrate |npx sequelize db:migrate
+   ##### 5. Executar seeds:
+        yarn sequelize db:seed:all | npx sequelize db:seed:all
+   ##### 6. Executar API em ambiente de desenvolvimento, porta padrão 3333:
+        yarn dev |npm run dev
+   ##### 7. Renderizando e visualizando documentação da API, porta padrão 3000:
+        yarn doc | npm run doc
+        yarn doc --server | npm run doc --server
    
   ### 🔨 Comandos úteis:
    ##### Ambiente de produção:
-        - yarn/npm run build: Realiza build da aplicação.
-        - yarn/npm run start: Executa projeto em produção.
+        - yarn build | npm run build: Realiza build da aplicação.
+        - yarn start | npm run start: Executa projeto em produção.
 
