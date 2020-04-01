@@ -32,11 +32,22 @@ Autor: [Leonardo Monteiro](https://github.com/Leon4rdoMonteiro)
    + 🌩 Aplicação hospedada para consumo [aqui](http://167.71.155.74/v1)
         - Obs: Todas as rotas iniciam com o prefixo /v1
         
+   + 📜 Para visualizar a documentação clique [aqui](http://167.71.155.74/docs)
+        
 
  ### 🖊 Configurações:
  
+
+  - Criar arquivos de configuração: ```.env e .env.test``` com base nos arquivos: ```.env.example e .env.test.example```
+ 
+ 
+  + Criar um APP_SECRET para geração dos tokens e armazenar nas variáveis de ambiente.
+  
+```js
+APP_SECRET=
+```
+ 
  + Alterar variáveis de ambiente para conectar o banco de dados SQL ao Sequelize.
-   - Obs: Criar arquivos ```.env & .env.test```
   
 ```js
 DB_HOST=
@@ -46,7 +57,6 @@ DB_NAME=
 ```
 
 + Alterar variáveis de ambiente para conectar a aplicação ao banco de dados Redis. 
-  - Obs: Criar arquivos ```.env e .env.test```
 
 ```js
 REDIS_HOST=127.0.0.1
