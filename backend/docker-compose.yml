@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  pg:
+    image: "postgres:latest"
+    container_name: "bossabox"
+    restart: always
+    volumes:
+      - ./data/postgres/db:/data/db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+      - POSTGRES_DB=${DB_NAME}
+
+  redis:
+    image: redis:alpine
+    container_name: redisbossabox
+    ports:
+      - "${REDIS_PORT}:6379"
+
