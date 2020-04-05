@@ -7,6 +7,9 @@ node_modules/
 # => dist directory - only on production
 dist
 
+# => postgres volume directory
+data
+
 # => enviroment variables
 .env
 .env.test
