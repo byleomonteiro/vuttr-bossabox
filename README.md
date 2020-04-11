@@ -55,6 +55,7 @@ DB_USER=
 DB_PASS=
 DB_NAME=
 ```
+    Obs: Criar uma nova base de dados no container para o realizar os testes ou utilizar a base principal. 
 
 + Alterar variáveis de ambiente para conectar a aplicação ao banco de dados Redis. 
 
@@ -71,6 +72,8 @@ Usuário de teste para autenticar-se na API:
   "password: "12345678"
 }
 ```
+    
+    Obs: Criar diretório tmp/uploads/ dentro da pasta backend.
 
  ### 🏁 Instalação:
   
