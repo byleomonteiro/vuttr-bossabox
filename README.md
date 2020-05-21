@@ -29,10 +29,10 @@ Autor: [Leonardo Monteiro](https://github.com/Leon4rdoMonteiro)
         - Digital Ocean
         - CI/CD: Buddy Works
   
-   + 🌩 Aplicação hospedada para consumo [aqui](http://167.71.155.74/v1)
+   + 🌩 Aplicação hospedada para consumo [aqui](http://vuttr.deepcrypto.com.br)
         - Obs: Todas as rotas iniciam com o prefixo /v1
         
-   + 📜 Para visualizar a documentação clique [aqui](http://167.71.155.74/docs)
+   + 📜 Para visualizar a documentação clique [aqui](http://vuttr.deepcrypto.com.br/docs)
         
 
  ### 🖊 Configurações:
