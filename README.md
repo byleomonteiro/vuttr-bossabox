@@ -24,15 +24,6 @@ Autor: [Leonardo Monteiro](https://github.com/Leon4rdoMonteiro)
         - express-brute: Para proteção contra ataques de força bruta. 
         - express-rate-limit: Proteção contra requisições maliciosas na rota da aplicação. 
         - helmet: Configura cabeçalhos HTTP e protege contra vários ataques como XSS e Sniffing. 
-    
-   + 🖥 Deploy:
-        - Digital Ocean
-        - CI/CD: Buddy Works
-  
-   + 🌩 Aplicação hospedada para consumo [aqui](http://vuttr.deepcrypto.com.br/v1)
-        - Obs: Todas as rotas iniciam com o prefixo /v1
-        
-   + 📜 Para visualizar a documentação clique [aqui](http://vuttr.deepcrypto.com.br/docs)
         
 
  ### 🖊 Configurações:
