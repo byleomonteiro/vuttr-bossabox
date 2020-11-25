@@ -1,9 +1,28 @@
-version: "3"
+version: "3.7"
 
 services:
+
+  vuttr_api:
+    image: leon4rdo/vuttr.api:v1
+    restart: always
+    container_name: vuttr.api
+    build:
+        context: .
+        target: dev
+    volumes:
+      - ./data:/usr/src/app
+    ports:
+      - "3333:3333"
+    depends_on:
+        - pg
+        - redis
+    env_file: .env
+    networks:
+      - vuttr_network
+
   pg:
-    image: "postgres:latest"
-    container_name: "bossabox"
+    image: postgres:alpine
+    container_name: vuttr.pg
     restart: always
     volumes:
       - ./data/postgres/db:/data/db
@@ -13,10 +32,17 @@ services:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASS}
       - POSTGRES_DB=${DB_NAME}
+    networks:
+      - vuttr_network
 
   redis:
     image: redis:alpine
-    container_name: redisbossabox
+    container_name: vuttr.redis
     ports:
       - "${REDIS_PORT}:6379"
+    networks:
+      - vuttr_network
 
+networks:
+  vuttr_network:
+    name: vuttr_network
