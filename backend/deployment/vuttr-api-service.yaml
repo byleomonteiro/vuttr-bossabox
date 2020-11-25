@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: vuttr-api
+spec:
+  type: LoadBalancer
+  selector:
+    app: vuttr-api
+  ports:
+  - protocol: TCP
+    port: 3333
