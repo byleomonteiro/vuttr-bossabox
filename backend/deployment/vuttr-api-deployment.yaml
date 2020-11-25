@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vuttr-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+        app: vuttr-api
+  template:
+    metadata:
+      labels:
+        app: vuttr-api
+    spec:
+      containers:
+      - name: vuttr-api
+        image: leon4rdo/vuttr.api:v1
+        ports:
+          - containerPort: 3333
